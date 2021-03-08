@@ -1,1 +1,1 @@
-# GPC
+# Grafica pe Calculator - Teme
