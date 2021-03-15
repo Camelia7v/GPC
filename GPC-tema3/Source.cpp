@@ -10,6 +10,22 @@
 
 // dimensiunea ferestrei in pixeli
 #define dim 300
+// numarul maxim de iteratii pentru testarea apartenentei la mult.Julia-Fatou
+#define iteratii_MJF 500
+// modulul maxim pentru testarea apartenentei la mult.Julia-Fatou
+#define apartenenta_MJF 1000
+// ratii ptr. MJuliaFatou
+#define RATIE_X_MJF 0.01
+#define RATIE_Y_MJF 0.01
+
+// numarul maxim de iteratii pentru testarea apartenentei la mult.Mandelbrot
+#define iteratii_M 500
+// modulul maxim pentru testarea apartenentei la mult.Mandelbrot
+#define apartenenta_M 2
+// ratii ptr. Mandelbrot
+#define RATIE_X_M 0.01
+#define RATIE_Y_M 0.01
+
 
 unsigned char prevKey;
 int nivel = 0;
@@ -310,8 +326,6 @@ public:
   }
 };
 
-
-
 class CCurbaHilbert
 {
 public:
@@ -356,6 +370,131 @@ public:
 };
 
 
+//clasa pentru lucrul cu numere complexe
+class CComplex {
+private:
+    double re, im;
+public:
+    CComplex() : re(0.0), im(0.0) {}
+    CComplex(double re1, double im1) : re(re1 * 1.0), im(im1 * 1.0) {}
+    CComplex(const CComplex& c) : re(c.re), im(c.im) {}
+    ~CComplex() {}
+
+    CComplex& operator=(const CComplex& c)
+    {
+        re = c.re;
+        im = c.im;
+        return *this;
+    }
+
+    double getRe() { return re; }
+    void setRe(double re1) { re = re1; }
+
+    double getIm() { return im; }
+    void setIm(double im1) { im = im1; }
+
+    double getModul() { return sqrt(re * re + im * im); }
+
+    int operator==(CComplex& c1)
+    {
+        return ((re == c1.re) && (im == c1.im));
+    }
+
+    CComplex powComplex()
+    {
+        CComplex rez;
+        rez.re = powl(re * 1.0, 2) - powl(im * 1.0, 2);
+        rez.im = 2.0 * re * im;
+        return rez;
+    }
+
+    void print(FILE* f)
+    {
+        fprintf(f, "%.20f%+.20f i", re, im);
+    }
+    friend CComplex operator+(const CComplex& c1, const CComplex& c2)
+    {
+        CComplex rez(c1.re + c2.re, c1.im + c2.im);
+        return rez;
+    }
+
+    friend CComplex operator*(CComplex& c1, CComplex& c2)
+    {
+        CComplex rez(c1.re * c2.re - c1.im * c2.im,
+            c1.re * c2.im + c1.im * c2.re);
+        return rez;
+    }
+
+
+};
+
+class MJuliaFatou {
+private:
+    struct SDate {
+        CComplex c;
+        // nr. de iteratii
+        int nr_iteratii;
+        // modulul maxim
+        double modmax;
+    } m;
+public:
+    MJuliaFatou()
+    {
+        // m.c se initializeaza implicit cu 0+0i
+
+        m.nr_iteratii = iteratii_MJF;
+        m.modmax = apartenenta_MJF;
+    }
+
+    MJuliaFatou(CComplex& c)
+    {
+        m.c = c;
+        m.nr_iteratii = iteratii_MJF;
+        m.modmax = apartenenta_MJF;
+    }
+
+    ~MJuliaFatou() {}
+
+    void set_modmax(double v) { assert(v <= apartenenta_MJF); m.modmax = v; }
+    double get_modmax() { return m.modmax; }
+
+    void set_nr_iteratii(int v) { assert(v <= iteratii_MJF); m.nr_iteratii = v; }
+    int get_nr_iteratii() { return m.nr_iteratii; }
+
+    // testeaza daca x apartine multimii Julia-Fatou
+    // returneaza 0 daca apartine, -1 daca converge finit, +1 daca converge infinit
+    int esteInMultimeaJuliaFatou(CComplex& x)
+    {
+        int rez = 0;
+        // tablou in care vor fi memorate valorile procesului iterativ z_n+1 = z_n * z_n + c
+        CComplex z0, z1;
+
+        z0 = x;
+        for (int i = 1; i < m.nr_iteratii; i++)
+        {
+            z1 = z0 * z0 + m.c;
+            if (z1 == z0)
+            {
+                // x nu apartine m.J-F deoarece procesul iterativ converge finit
+                rez = -1;
+                break;
+            }
+            else if (z1.getModul() > m.modmax)
+            {
+                // x nu apartine m.J-F deoarece procesul iterativ converge la infinit
+                rez = 1;
+                break;
+            }
+            z0 = z1;
+        }
+
+        return rez;
+    }
+
+    // afisarea multimii J-F care intersecteaza multimea argument
+    void display(double xmin, double ymin, double xmax, double ymax)
+    {}
+};
 
 // afisare curba lui Koch "fulg de zapada"
 void Display1() {
@@ -502,6 +641,197 @@ void Display4() {
   nivel++;
 }
 
+// Multimea Julia-Fatou 1
+void Display5() {
+    //numarul c de la care se pleaca
+    CComplex c(-0.12375, 0.056805);
+    MJuliaFatou mjf(c);
+
+    glColor3f(1.0, 0.1, 0.1);
+    //mjf.set_nr_iteratii(30);
+    ////se apeleaza display cu valorile lui c1 si c2, date
+    //mjf.display(-0.8, -0.4, 0.8, 0.4);
+
+    glRasterPos2d(-1.0, -0.9);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'M');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 't');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'm');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ' ');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'J');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '-');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'F');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 't');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'o');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+}
+
+
+// multimea Julia-Fatou 2
+void Display6() {
+    //numarul c de la care se pleaca
+    CComplex c(-0.012, 0.74);
+    MJuliaFatou mjf(c);
+
+    glColor3f(1.0, 0.1, 0.1);
+    //mjf.set_nr_iteratii(30);
+    ////se apeleaza display cu valorile lui c, date
+    //mjf.display(-1, -1, 1, 1);
+
+    glRasterPos2d(-1.0, -0.9);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'M');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 't');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'm');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ' ');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'J');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '-');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'F');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 't');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'o');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+}
+
+// multimea Mandelbrot
+void Display7() {
+   // CMandelbrot cm;
+
+    glColor3f(1.0, 0.1, 0.1);
+   //cm.set_nr_iteratii(15);
+   // cm.display1(-2, -2, 2, 2);
+
+
+    glRasterPos2d(-0.9, 0.9);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'M');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 't');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'm');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ' ');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'M');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'n');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'd');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'b');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'r');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'o');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 't');
+}
+
+void Display8() {
+    //CImaginea1 cimg1;
+    //cimg1.afisare(1, nivel);
+
+    char c[3];
+    sprintf(c, "%2d", nivel);
+    glRasterPos2d(-0.98, -0.98);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'N');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'v');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '=');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[0]);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[1]);
+
+    glRasterPos2d(-1.0, -0.9);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'I');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'm');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'g');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'n');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ' ');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '1');
+
+    nivel++;
+}
+
+void Display9() {
+    //CImaginea2 cimg2;
+    //cimg2.afisare(0.3, nivel);
+
+    char c[3];
+    sprintf(c, "%2d", nivel);
+    glRasterPos2d(-0.98, -0.98);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'N');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'v');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '=');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[0]);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[1]);
+
+    glRasterPos2d(-1.0, -0.9);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'I');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'm');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'g');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'n');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ' ');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '2');
+
+    nivel++;
+}
+
+void Display10() {
+    //CImaginea3 cimg3;
+    //cimg3.afisare(0.8 / pow(2.0, (nivel - 1)), nivel);
+
+    char c[3];
+    sprintf(c, "%2d", nivel);
+    glRasterPos2d(-0.98, -0.98);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'N');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'v');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '=');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[0]);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[1]);
+
+    glRasterPos2d(-1.0, -0.9);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'I');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'm');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'g');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'n');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ' ');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '3');
+
+    nivel++;
+}
+
 void Init(void) {
 
    glClearColor(1.0,1.0,1.0,1.0);
@@ -538,6 +868,30 @@ void Display(void)
       glClear(GL_COLOR_BUFFER_BIT);
       Display4();
       break;
+    case '5':
+        glClear(GL_COLOR_BUFFER_BIT);
+        Display5();
+        break;
+    case '6':
+        glClear(GL_COLOR_BUFFER_BIT);
+        Display6();
+        break;
+    case '7':
+        glClear(GL_COLOR_BUFFER_BIT);
+        Display7();
+        break;
+    case '8':
+        glClear(GL_COLOR_BUFFER_BIT);
+        Display8();
+        break;
+    case '9':
+        glClear(GL_COLOR_BUFFER_BIT);
+        Display9();
+        break;
+    case '-':
+        glClear(GL_COLOR_BUFFER_BIT);
+        Display10();
+        break;
     default:
       break;
   }
