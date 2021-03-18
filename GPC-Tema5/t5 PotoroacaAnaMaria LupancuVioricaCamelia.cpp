@@ -755,7 +755,7 @@ public:
     int get_nr_iteratii() { return m.nr_iteratii; }
 
     // testeaza daca un punct apartine multimii Mandelbrot
-    // si returneaza 0 daca acesta apartine, 1 daca acesta nu apartine
+    // si returneaza 0 daca acesta apartine, i daca acesta nu apartine
     int esteInMultimeaMandelbrot(CComplex& c) {
         int flag = 0;
         CComplex z0(0, 0);
@@ -904,28 +904,28 @@ public:
 
             // patratele mici
 
-            CPunct stanga_sus(cx - lungime / 3, cy + lungime / 3);
-            imaginea1(stanga_sus, lungime / 3, nivel_l - 1);
+            CPunct stanga_sus(cx - lm, cy + lm);
+            imaginea1(stanga_sus, lm, nivel_l - 1);
 
-            CPunct centru_sus(cx, cy + lungime / 3);
-            imaginea1(centru_sus, lungime / 3, nivel_l - 1);
+            CPunct centru_sus(cx, cy + lm);
+            imaginea1(centru_sus, lm, nivel_l - 1);
 
-            CPunct dreapta_sus(cx + lungime / 3, cy + lungime / 3);
-            imaginea1(dreapta_sus, lungime / 3, nivel_l - 1);
+            CPunct dreapta_sus(cx + lm, cy + lm);
+            imaginea1(dreapta_sus, lm, nivel_l - 1);
 
-            CPunct stanga(cx - lungime / 3, cy);
-            imaginea1(stanga, lungime / 3, nivel_l - 1);
+            CPunct stanga(cx - lm, cy);
+            imaginea1(stanga, lm, nivel_l - 1);
 
-            CPunct dreapta(cx + lungime / 3, cy);
-            imaginea1(dreapta, lungime / 3, nivel_l - 1);
-            CPunct stanga_jos(cx - lungime / 3, cy - lungime / 3);
-            imaginea1(stanga_jos, lungime / 3, nivel_l - 1);
+            CPunct dreapta(cx + lm, cy);
+            imaginea1(dreapta, lm, nivel_l - 1);
+            CPunct stanga_jos(cx - lm, cy - lm);
+            imaginea1(stanga_jos, lm, nivel_l - 1);
 
-            CPunct centru_jos(cx, cy - lungime / 3);
-            imaginea1(centru_jos, lungime / 3, nivel_l - 1);
+            CPunct centru_jos(cx, cy - lm);
+            imaginea1(centru_jos, lm, nivel_l - 1);
 
-            CPunct dreapta_jos(cx + lungime / 3, cy - lungime / 3);
-            imaginea1(dreapta_jos, lungime / 3, nivel_l - 1);
+            CPunct dreapta_jos(cx + lm, cy - lm);
+            imaginea1(dreapta_jos, lm, nivel_l - 1);
         }
     }
 
