@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="t5 PotoroacaAnaMaria LupancuVioricaCamelia.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glut.h" />
