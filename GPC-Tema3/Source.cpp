@@ -162,7 +162,7 @@ public:
        
         CPunct p(x, y);
         puncte.push_back(p);
-        
+
         while (x < xmax) {
             if (d <= 0) {
                 /* alegem E */
@@ -182,11 +182,14 @@ public:
             {
 
                 puncte.push_back(CPunct(x, y - i));
-                if (y + i < linii)
+                if (y + i < linii/2)
                     puncte.push_back(CPunct(x, y + i));
+                if (x + i < linii / 2)
+                    puncte.push_back(CPunct(x + i, y - i));
             }
 
         }
+       
         return puncte;
 
     }
