@@ -1,6 +1,6 @@
-﻿  Source.cpp
-C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\Source.cpp(603,62): warning C4390: ';': empty controlled statement found; is this the intent?
-C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\Source.cpp(606,71): warning C4390: ';': empty controlled statement found; is this the intent?
-C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\Source.cpp(751,60): warning C4390: ';': empty controlled statement found; is this the intent?
-C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\Source.cpp(754,69): warning C4390: ';': empty controlled statement found; is this the intent?
+﻿  t5 PotoroacaAnaMaria LupancuVioricaCamelia.cpp
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\t5 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(603,62): warning C4390: ';': empty controlled statement found; is this the intent?
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\t5 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(606,71): warning C4390: ';': empty controlled statement found; is this the intent?
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\t5 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(751,60): warning C4390: ';': empty controlled statement found; is this the intent?
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\t5 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(754,69): warning C4390: ';': empty controlled statement found; is this the intent?
   GPC-Tema5.vcxproj -> C:\Users\Home\Documents\GitHub\GPC\GPC-Tema5\Debug\GPC-Tema5.exe
