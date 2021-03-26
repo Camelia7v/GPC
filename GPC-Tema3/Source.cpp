@@ -159,11 +159,9 @@ public:
         int dNE = 2 * (dy - dx);
         double x = xmin;
         double y = ymin;
-       
-        CPunct p(x, y);
-        puncte.push_back(p);
-
-        while (x < xmax) {
+        CPunct q(x, y);
+        puncte.push_back(q);
+        while (y < ymax) {
             if (d <= 0) {
                 /* alegem E */
                 d += dE;
@@ -178,16 +176,20 @@ public:
             CPunct q(x, y);
             //printf("Value of x = %f\n", puncte[0].get_x());
             puncte.push_back(q);
-            for (int i = 1; i <= 3 / 2; i++)
-            {
-
-                puncte.push_back(CPunct(x, y - i));
-                if (y + i < linii/2)
+            for (int i = 1; i <= 5 / 2; i++){
+                if (y + i < linii / 2)
                     puncte.push_back(CPunct(x, y + i));
-                if (x + i < linii / 2)
-                    puncte.push_back(CPunct(x + i, y - i));
+                
             }
+            for (int i = -1; i <= 5 / 2; i++) {
+                if (-y + i < linii / 2)
+                {
+                    if (x + i < linii / 2) {
+                        puncte.push_back(CPunct(x + i, -y));
+                    }
 
+                }
+            }
         }
        
         return puncte;
