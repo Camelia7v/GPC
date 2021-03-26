@@ -132,7 +132,8 @@ public:
         double y_GL = cy  + j * d_l;
 
         int num_segments = 24;
-        glColor4f(1.0f, 0.0f, 0.0f, 0.0f);//red
+        glColor3f(0.0f, 0.5f, 1.0f);//baby Blue
+        glLineWidth(3);
         glBegin(GL_POLYGON);
         for (int i = 0; i < num_segments; i++)
         {
@@ -142,8 +143,10 @@ public:
             float y = r * sinf(theta);
 
             glVertex2f(x + x_GL, y + y_GL);
+
         }
         glEnd();
+        glLineWidth(1);
            
     }
 
