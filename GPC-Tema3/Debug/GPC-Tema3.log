@@ -1,2 +1,3 @@
-﻿  Source.cpp
-  GPC-Tema3.vcxproj -> C:\Users\Home\source\repos\GPC-Tema3\Debug\GPC-Tema3.exe
+﻿  t03 PotoroacaAnaMaria LupancuVioricaCamelia.cpp
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema3\t03 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(194,35): warning C4018: '<': signed/unsigned mismatch
+  GPC-Tema3.vcxproj -> C:\Users\Home\Documents\GitHub\GPC\GPC-Tema3\Debug\GPC-Tema3.exe
