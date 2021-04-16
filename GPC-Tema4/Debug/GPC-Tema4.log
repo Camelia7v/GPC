@@ -1,3 +1,5 @@
 ﻿  t04 PotoroacaAnaMaria LupancuVioricaCamelia.cpp
-C:\Users\Home\Documents\GitHub\GPC\GPC-Tema4\t04 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(194,35): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema4\t04 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(197,35): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema4\t04 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(269,35): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Home\Documents\GitHub\GPC\GPC-Tema4\t04 PotoroacaAnaMaria LupancuVioricaCamelia.cpp(357,35): warning C4018: '<': signed/unsigned mismatch
   GPC-Tema4.vcxproj -> C:\Users\Home\Documents\GitHub\GPC\GPC-Tema4\Debug\GPC-Tema4.exe

@@ -1,6 +1,3 @@
-// GPC-Tema4.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdlib.h>
@@ -11,15 +8,12 @@
 #include <vector>
 #include <GL/glut.h>
 
-
 #define dim 300 // dimensiunea ferestrei in pixeli
 #define MAX_L 26
 #define MAX_C 26
 
-
 unsigned char prevKey;
 int nivel = 0;
-
 
 class CPunct
 {
@@ -79,12 +73,13 @@ public:
         d_l = (2.0 - 2.0 * epsilon) / ((double)linii);
         d_c = (2.0 - 2.0 * epsilon) / ((double)coloane);
     }
+
     int get_linii() { return linii; }
     int get_coloane() { return coloane; }
     ~GrilaCarteziana() {}
 
     void afisareGrila() {
-        glColor3f(0.0, 0.0, 0.0); // negru\
+        glColor3f(0.0, 0.0, 0.0); // negru
 
         double xmax = (double)dim / (double)dim + epsilon;
         double ymax = (double)dim / (double)dim + epsilon;
@@ -106,8 +101,7 @@ public:
     }
 
     void drawCircle(float x1, float y1, float r) {
-        //glColor3f(0.0f, 0.5f, 1.0f); // baby blue
-        glColor3f(0.0, 0.0, 0.0); //negru
+        glColor3f(0.0, 0.0, 0.0); // negru
         glBegin(GL_TRIANGLE_FAN);
         glVertex2f(x1, y1);
 
@@ -214,9 +208,9 @@ public:
         glEnd();
         glLineWidth(1);
     }
+
     std::vector<CPunct> AfisarePuncteCerc3(int x, int y)
     {
-
         std::vector<CPunct>  puncte;
         puncte.push_back(CPunct(x, y));
         for (int i = 1; i <= 3 / 2; i++)
@@ -227,6 +221,7 @@ public:
 
         return puncte;
     }
+
     std::vector<CPunct> AfisareCerc4(float R)
     {
         std::vector<CPunct>  puncte;
@@ -276,13 +271,17 @@ public:
             //printf("Value of x = %f\n", punct.get_x());
             writePixel(pixeli[index].get_x(), pixeli[index].get_y());
         }
+
         glColor3f(1.0, 0.1, 0.1); // rosu
         glLineWidth(4.f);
+
         double xmax = 1 + epsilon;
         double ymax = 1 + epsilon;
         float rx = (2.0 / (double)coloane * (0 + R) - 1) / xmax;
         float ry = (2.0 / (double)linii * 0 - 1) / ymax;
+
         glBegin(GL_LINE_LOOP);
+
         for (int i = 0; i < 1000; i++)
         {
             float theta = 2.0f * 3.1415926f * float(i) / float(1000);//get the current angle
@@ -293,16 +292,15 @@ public:
             glVertex2f((double)x + cx, ((double)y + cy));//output vertex
 
         }
+
         glEnd();
         glLineWidth(1.f);
-
     }
 
     std::vector<CPunct> UmplereElipsa(int x0, int y0, int a, int b, double val) {
         std::vector<CPunct>  puncte;
         int x = -a;
         int y = 0;
-
         double d2 = b * b * (x + 0.5) * (x + 0.5) + a * a * (y - 1) * (y - 1) - a * a * b * b;
         double d1;
 
@@ -352,16 +350,18 @@ public:
         }
         return puncte;
     }
+
     void afisareElipsa(int x0, int y0, int a, int b, double val) {
         std::vector<CPunct> pixeli = UmplereElipsa(x0, y0, a, b, val);
+
         for (int index = 0; index < pixeli.size(); index++)
         {
             //printf("Value of x = %f\n", punct.get_x());
             writePixel(pixeli[index].get_x(), pixeli[index].get_y());
         }
 
-
         float raza = 0.03;
+
         glColor3f(1.0, 0.1, 0.1); // rosu
         glLineWidth(4.f);
         glBegin(GL_LINE_STRIP);
@@ -376,26 +376,8 @@ public:
 
         glEnd();
         glLineWidth(1.f);
-
-
     }
 };
-
-
-void Display1() {
-    GrilaCarteziana grila;
-    grila.set_linii(16);
-    grila.set_coloane(16);
-    grila.afisareGrila();
-    /* grila.afisareLinie(-7.5, 7.5, 7.5, 2.5);
-     grila.afisareLinie(-7.5, -7.5, 7.5, -0.5);*/
-    grila.writePixel(0.0, 0.0);
-
-    grila.afisareCerc(14, 3);
-    //grila.afisareElipsa(1, 1, 10, 10, 5);
-
-    glFlush();
-}
 
 
 void Init(void) {
@@ -487,5 +469,3 @@ int main(int argc, char** argv)
 
     return 0;
 }
-
-
