@@ -8,7 +8,7 @@
 
 unsigned char prevKey;
 
-enum EObiect { cubw, cubs, sferaw, sferas } ob = cubw;
+enum EObiect { cubw, cubs, sferaw, sferas, trianglew, triangles} ob = cubw;
 
 void DisplayAxe() {
     int X, Y, Z;
@@ -65,6 +65,35 @@ void Display4() {
     glutSolidSphere(1, 10, 10);
 }
 
+// triangle wireframe
+void Display5() {
+    //glColor3f(1, 0, 0);
+    //glutWireTetrahedron();
+    glPushMatrix();
+        glColor3f(1.0f, 0.5f, 0.0f);//Orange
+        glBegin(GL_LINE_LOOP);
+        glVertex3f(0.0, 0.0, 0.0);
+        glVertex3f(0.0, 1.0, 0.0);
+        glVertex3f(0.0, 0.5, 1.0);
+        glEnd();
+    glPopMatrix();
+}
+
+// triangle solid
+void Display6() {
+    /*glColor3f(1, 0, 0);
+    glutSolidTetrahedron();*/
+
+    glPushMatrix();
+        glColor3f(1.0f, 0.5f, 0.0f);//Orange
+        glBegin(GL_TRIANGLES);
+        glVertex3f(0.0, 0.0, 0.0);
+        glVertex3f(0.0, 1.0, 0.0);
+        glVertex3f(0.0, 0.5, 1.0);
+        glEnd();
+    glPopMatrix();
+}
+
 void DisplayObiect()
 {
     switch (ob)
@@ -81,27 +110,33 @@ void DisplayObiect()
     case sferas:
         Display4();
         break;
+    case trianglew:
+        Display5();
+        break;
+    case triangles:
+        Display6();
+        break;
     default:
         break;
     }
 }
 
-// rotatia cu un unghi de 10 grade in raport cu axa x
+// rotatia cu un unghi de 20 grade in raport cu axa x
 void DisplayX() {
     glMatrixMode(GL_MODELVIEW);
-    glRotated(10, 1, 0, 0);
+    glRotated(20, 1, 0, 0);
 }
 
-// rotatia cu un unghi de 10 grade in raport cu axa y
+// rotatia cu un unghi de 20 grade in raport cu axa y
 void DisplayY() {
     glMatrixMode(GL_MODELVIEW);
-    glRotated(10, 0, 1, 0);
+    glRotated(20, 0, 1, 0);
 }
 
-// rotatia cu un unghi de 10 grade in raport cu axa z
+// rotatia cu un unghi de 20 grade in raport cu axa z
 void DisplayZ() {
     glMatrixMode(GL_MODELVIEW);
-    glRotated(10, 0, 0, 1);
+    glRotated(20, 0, 0, 1);
 }
 
 // Translatia cu 0.2, 0.2, 0.2
@@ -113,7 +148,7 @@ void DisplayT() {
 // Scalarea cu 1.2, 1.2, 1.2
 void DisplayS() {
     glMatrixMode(GL_MODELVIEW);
-    glScalef(1.2, 1.2, 1.2);
+    glScalef(4, 4, 4);
 }
 
 void Init(void) {
@@ -159,35 +194,83 @@ void Display(void) {
         Display4();
         ob = sferas;
         break;
+    case '5':
+        Display5();
+        ob = trianglew;
+        break;
+    case '6':
+        Display6();
+        ob = triangles;
+        break;
     case 'x':
         glClear(GL_COLOR_BUFFER_BIT);
-        DisplayX();
+        //axe variante
+        /*DisplayX();
         DisplayAxe();
-        DisplayObiect();
+        DisplayObiect();*/
+
+        //axe invariante
+        DisplayAxe();
+        glPushMatrix();
+            DisplayX();
+            DisplayObiect();
+        glPopMatrix();
         break;
     case 'y':
         glClear(GL_COLOR_BUFFER_BIT);
-        DisplayY();
+        //axe variante
+        //DisplayY();
+        //DisplayAxe();
+        //DisplayObiect();
+
+        //axe invariante
         DisplayAxe();
-        DisplayObiect();
+        glPushMatrix();
+            DisplayY();
+            DisplayObiect();
+        glPopMatrix();
         break;
     case 'z':
         glClear(GL_COLOR_BUFFER_BIT);
-        DisplayZ();
+        //axe variante
+        //DisplayZ();
+        //DisplayAxe();
+        //DisplayObiect();
+        
+        //axe invariante
         DisplayAxe();
-        DisplayObiect();
+        glPushMatrix();
+            DisplayZ();
+            DisplayObiect();
+        glPopMatrix();
         break;
     case 't':
         glClear(GL_COLOR_BUFFER_BIT);
-        DisplayT();
+        //axe variante
+        //DisplayT();
+        //DisplayAxe();
+        //DisplayObiect();
+
+        //axe invariante
         DisplayAxe();
-        DisplayObiect();
+        glPushMatrix();
+            DisplayT();
+            DisplayObiect();
+        glPopMatrix();
         break;
     case 's':
         glClear(GL_COLOR_BUFFER_BIT);
-        DisplayS();
+        //axe variante
+        //DisplayS();
+        //DisplayAxe();
+        //DisplayObiect();
+
+        //axe invariante
         DisplayAxe();
-        DisplayObiect();
+        glPushMatrix();
+            DisplayS();
+            DisplayObiect();
+        glPopMatrix();
         break;
     default:
         break;
