@@ -7,8 +7,30 @@
 #define dim 300
 
 unsigned char prevKey;
+//coordonate triunghi
+//P1
+double p1_x = 1.0;
+double p1_y = 1.0;
+double p1_z = 1.0;
+//P2 
+double p2_x = 0.0;
+double p2_y = 7.0;
+double p2_z = 0.0;
+//P3 
+double p3_x = 0.0;
+double p3_y = 7.0;
+double p3_z = 7.0;
 
-enum EObiect { cubw, cubs, sferaw, sferas, trianglew, triangles} ob = cubw;
+//TODO astea ar trebui calculate cu niste formule pt punctaj maxim la ex 2
+// habar nu am care sunt formulele inca, ca referinta cap3e, pag 24
+
+//pt exercitiu 2, case 1-5, din functia Display
+//valori unghiuri pentru rotatii cub
+double theta = 180;
+double alfa = 180;
+double phi = 180;
+
+enum EObiect { cubw, cubs, sferaw, sferas, trianglew, triangles } ob = cubw;
 
 void DisplayAxe() {
     int X, Y, Z;
@@ -41,14 +63,40 @@ void DisplayAxe() {
     glLineWidth(1);
 }
 
-// cub wireframe
-void Display1() {
+
+void DisplayMainDiagonal() {
+    glLineWidth(4);
+    glColor3f(0.0f, 0.1f, 0.1f);//Dark blue
+    glBegin(GL_LINE_STRIP);
+    glVertex3f(0.95f, 0.95f, 0.0f);
+    glVertex3f(0.0f, 0.0f, 0.95f);
+    glEnd();
+
+    glLineWidth(1);
+}
+
+void DisplayWireCube(double size = 1) {
     glColor3f(1, 0, 0);
-    glutWireCube(1);
+    glTranslatef(0.3f, 0.3f, 0.0f);
+    glutWireCube(size);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);  // this tells it to only render lines
+
+    //glBegin(GL_LINES);
+    //glVertex3f(-0.5, -0.5, 0.5);
+    //glVertex3f(-0.5, 0.5, 0.5);
+    //glVertex3f(-0.5, 0.5, -0.5);
+    //glVertex3f(-0.5, -0.5, -0.5);
+    //glEnd();
+}
+
+// cub wireframe
+void Display1(double size = 1) {
+    glColor3f(1, 0, 0);
+    glutWireCube(size);
 }
 
 // cub solid
-void Display2() {
+void Display2(double size = 1) {
     glColor3f(1, 0, 0);
     glutSolidCube(1);
 }
@@ -66,32 +114,30 @@ void Display4() {
 }
 
 // triangle wireframe
-void Display5() {
+void Display5(double p1_x, double p1_y, double p1_z, double p2_x, double p2_y, double p2_z, double p3_x, double p3_y, double p3_z) {
     //glColor3f(1, 0, 0);
     //glutWireTetrahedron();
-    glPushMatrix();
-        glColor3f(1.0f, 0.5f, 0.0f);//Orange
-        glBegin(GL_LINE_LOOP);
-        glVertex3f(0.0, 0.0, 0.0);
-        glVertex3f(0.0, 1.0, 0.0);
-        glVertex3f(0.0, 0.5, 1.0);
-        glEnd();
-    glPopMatrix();
+
+    glColor3f(1.0f, 0.5f, 0.0f);//Orange
+    glBegin(GL_LINE_LOOP);
+    glVertex3f(p1_x, p1_y, p1_z);
+    glVertex3f(p2_x, p2_y, p2_z);
+    glVertex3f(p3_x, p3_y, p3_z);
+    glEnd();
 }
 
 // triangle solid
-void Display6() {
+void Display6(double p1_x, double p1_y, double p1_z, double p2_x, double p2_y, double p2_z, double p3_x, double p3_y, double p3_z) {
     /*glColor3f(1, 0, 0);
     glutSolidTetrahedron();*/
-
-    glPushMatrix();
-        glColor3f(1.0f, 0.5f, 0.0f);//Orange
-        glBegin(GL_TRIANGLES);
-        glVertex3f(0.0, 0.0, 0.0);
-        glVertex3f(0.0, 1.0, 0.0);
-        glVertex3f(0.0, 0.5, 1.0);
-        glEnd();
-    glPopMatrix();
+    glLineWidth(3);
+    glColor3f(1.0f, 0.5f, 0.0f);//Orange
+    glBegin(GL_TRIANGLES);
+    glVertex3f(p1_x, p1_y, p1_z);
+    glVertex3f(p2_x, p2_y, p2_z);
+    glVertex3f(p3_x, p3_y, p3_z);
+    glEnd();
+    glLineWidth(1);
 }
 
 void DisplayObiect()
@@ -111,10 +157,10 @@ void DisplayObiect()
         Display4();
         break;
     case trianglew:
-        Display5();
+        Display5(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
         break;
     case triangles:
-        Display6();
+        Display6(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
         break;
     default:
         break;
@@ -142,13 +188,17 @@ void DisplayZ() {
 // Translatia cu 0.2, 0.2, 0.2
 void DisplayT() {
     glMatrixMode(GL_MODELVIEW);
-    glTranslatef(0.2, 0.2, 0.2);
+    //glTranslatef(0.2, 0.2, 0.2);
+    //glTranslatef(0.0,0.0,0.0);
+    glTranslatef(-1.0, -1.0, 0.0); //merge inainte pe Oz
+    //glTranslatef(1.0, 1.0, 0.0); //trece pe Ox
+    //glTranslatef(0.0, 1.0, -1.0); //trece pe Oy
 }
 
 // Scalarea cu 1.2, 1.2, 1.2
 void DisplayS() {
     glMatrixMode(GL_MODELVIEW);
-    glScalef(4, 4, 4);
+    glScalef(1.3, 1.4, 1.4);
 }
 
 void Init(void) {
@@ -194,14 +244,105 @@ void Display(void) {
         Display4();
         ob = sferas;
         break;
-    case '5':
-        Display5();
+        //display axe + wire triunghi
+        //CASE 0
+    case 'q':
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(20, 1, 0, 0);
+        glRotated(-20, 0, 1, 0);
+        DisplayAxe();
+        Display5(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
         ob = trianglew;
         break;
-    case '6':
-        Display6();
+        /*========================================*/
+        /*==============EXERCITIUL 2==============*/
+        //display axe + triunghi
+        //CASE 1
+    case 'w':
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(20, 1, 0, 0);
+        glRotated(-20, 0, 1, 0);
+        DisplayAxe();
+        Display6(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
         ob = triangles;
         break;
+        //display axe + triunghi
+        //CASE 2 = TRANSLATE
+    case 'e':
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(20, 1, 0, 0);
+        glRotated(-20, 0, 1, 0);
+        DisplayAxe();
+        glTranslated(-p1_x, -p1_y, -p1_z);
+        Display6(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
+        ob = triangles;
+        break;
+        //display axe + triunghi
+        //CASE 3 = ROTATE + TRANSLATE
+    case 'r':
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(20, 1, 0, 0);
+        glRotated(-20, 0, 1, 0);
+        DisplayAxe();
+        glRotated(theta - 90, 0, 1, 0);
+        glTranslated(-p1_x, -p1_y, -p1_z);
+        Display6(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
+        ob = triangles;
+        break;
+        //display axe + triunghi
+        //CASE 4 = ROTATED + ROTATED + TRANSLATE
+    case 'c':
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(20, 1, 0, 0);
+        glRotated(-20, 0, 1, 0);
+        DisplayAxe();
+        glRotated(alfa, 0, 0, 1);
+        glRotated(theta - 90, 0, 1, 0);
+        glTranslated(-p1_x, -p1_y, -p1_z);
+        Display6(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
+        ob = triangles;
+        break;
+        //display axe + triunghi
+        //CASE 5 = ROTATED + ROTATED + ROTATED + TRANSLATE
+    case 'v':
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(20, 1, 0, 0);
+        glRotated(-20, 0, 1, 0);
+        DisplayAxe();
+        glRotated(phi, 0, 0, 1);
+        glRotated(alfa, 1, 0, 0);
+        glRotated(theta - 90, 0, 1, 0);
+        glTranslated(-p1_x, -p1_y, -p1_z);
+        Display6(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
+        ob = triangles;
+        break;
+        /*========================================*/
+        /*==============EXERCITIUL 3==============*/
+    case 'b':
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(20, 1, 0, 0);
+        glRotated(-20, 0, 1, 0);
+        DisplayAxe();
+        DisplayMainDiagonal();
+        //Display1();
+        DisplayWireCube();
+        ob = cubw;
+        break;
+        /*=======================================*/
     case 'x':
         glClear(GL_COLOR_BUFFER_BIT);
         //axe variante
@@ -212,8 +353,8 @@ void Display(void) {
         //axe invariante
         DisplayAxe();
         glPushMatrix();
-            DisplayX();
-            DisplayObiect();
+        DisplayX();
+        DisplayObiect();
         glPopMatrix();
         break;
     case 'y':
@@ -226,8 +367,8 @@ void Display(void) {
         //axe invariante
         DisplayAxe();
         glPushMatrix();
-            DisplayY();
-            DisplayObiect();
+        DisplayY();
+        DisplayObiect();
         glPopMatrix();
         break;
     case 'z':
@@ -236,12 +377,12 @@ void Display(void) {
         //DisplayZ();
         //DisplayAxe();
         //DisplayObiect();
-        
+
         //axe invariante
         DisplayAxe();
         glPushMatrix();
-            DisplayZ();
-            DisplayObiect();
+        DisplayZ();
+        DisplayObiect();
         glPopMatrix();
         break;
     case 't':
@@ -254,8 +395,8 @@ void Display(void) {
         //axe invariante
         DisplayAxe();
         glPushMatrix();
-            DisplayT();
-            DisplayObiect();
+        DisplayT();
+        DisplayObiect();
         glPopMatrix();
         break;
     case 's':
@@ -268,8 +409,8 @@ void Display(void) {
         //axe invariante
         DisplayAxe();
         glPushMatrix();
-            DisplayS();
-            DisplayObiect();
+        DisplayS();
+        DisplayObiect();
         glPopMatrix();
         break;
     default:
