@@ -7,28 +7,34 @@
 #define dim 300
 
 unsigned char prevKey;
-//coordonate triunghi
-//P1
+
+// coordonate triunghi
+// P1
 double p1_x = 1.0;
 double p1_y = 1.0;
 double p1_z = 1.0;
-//P2 
+// P2 
 double p2_x = 0.0;
 double p2_y = 7.0;
 double p2_z = 0.0;
-//P3 
+// P3 
 double p3_x = 0.0;
 double p3_y = 7.0;
 double p3_z = 7.0;
 
-//TODO astea ar trebui calculate cu niste formule pt punctaj maxim la ex 2
-// habar nu am care sunt formulele inca, ca referinta cap3e, pag 24
 
-//pt exercitiu 2, case 1-5, din functia Display
-//valori unghiuri pentru rotatii cub
-double theta = 180;
-double alfa = 180;
-double phi = 180;
+// pt. exercitiul 2, case 1-5, din functia Display
+
+
+// calculare distante dintre puncte
+double D1 = sqrt((p2_x - p1_x) * (p2_x - p1_x) + (p2_z - p1_z) * (p2_z - p1_z));
+double D2 = sqrt((p2_y - p1_y) * (p2_y - p1_y) + D1 * D1);
+double D3 = sqrt(p3_x * p3_x + p3_y * p3_y);
+
+// calculare valori unghiuri pentru rotatii cub
+double theta = 180 - acos((p2_z - p1_z) / D1);
+double alfa = 180 - acos(p3_y / D3);
+double phi = 180 - acos(D1 / D2);
 
 enum EObiect { cubw, cubs, sferaw, sferas, trianglew, triangles } ob = cubw;
 
@@ -66,7 +72,7 @@ void DisplayAxe() {
 
 void DisplayMainDiagonal() {
     glLineWidth(4);
-    glColor3f(0.0f, 0.1f, 0.1f);//Dark blue
+    glColor3f(0.0f, 0.1f, 0.1f); // Dark blue
     glBegin(GL_LINE_STRIP);
     glVertex3f(0.95f, 0.95f, 0.0f);
     glVertex3f(0.0f, 0.0f, 0.95f);
@@ -292,6 +298,7 @@ void Display(void) {
         glRotated(20, 1, 0, 0);
         glRotated(-20, 0, 1, 0);
         DisplayAxe();
+        printf("theta = %f\n", theta);
         glRotated(theta - 90, 0, 1, 0);
         glTranslated(-p1_x, -p1_y, -p1_z);
         Display6(p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, p3_x, p3_y, p3_z);
@@ -306,6 +313,7 @@ void Display(void) {
         glRotated(20, 1, 0, 0);
         glRotated(-20, 0, 1, 0);
         DisplayAxe();
+        printf("alfa = %f\n", alfa);
         glRotated(alfa, 0, 0, 1);
         glRotated(theta - 90, 0, 1, 0);
         glTranslated(-p1_x, -p1_y, -p1_z);
@@ -321,6 +329,7 @@ void Display(void) {
         glRotated(20, 1, 0, 0);
         glRotated(-20, 0, 1, 0);
         DisplayAxe();
+        printf("phi = %f\n", phi);
         glRotated(phi, 0, 0, 1);
         glRotated(alfa, 1, 0, 0);
         glRotated(theta - 90, 0, 1, 0);
