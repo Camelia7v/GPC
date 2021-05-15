@@ -16,7 +16,6 @@ void DisplayAxe();
 void InitObiect();
 void DisplayObiect();
 
-
 void Init(void) {
     glClearColor(1, 1, 1, 1);
 
@@ -102,6 +101,25 @@ void Display()
         DisplayObiect();
         glPopMatrix();
         break;
+    case 'e':
+        // IMAGINEA 1
+        // proiectie paralela ortografica verticala (deasupra)
+        proiectieParalela('e');
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glPushMatrix();
+        glTranslated(-lat / 2.0, -lat / 2.0, -lat / 2.0);
+        glTranslated(lat / 2.0, lat / 2.0, lat / 2.0);
+        glRotated(180, 0, 1, 1);
+        glRotated(180, 0, 0, 1);
+        glRotated(180, 1, 0, 0);
+        glTranslated(0, -lat, 0);
+        glTranslated(0, 0, -lat);
+        DisplayAxe();
+        DisplayObiect();
+        glPopMatrix();
+        break;
     default:
         break;
     }
@@ -163,6 +181,7 @@ void proiectieParalela(unsigned char c) {
         break;
     case 'q':
     case 'w':
+    case 'e':
         glOrtho(-1, 6, -1, 6, -1, 20);
         break;
     default:
