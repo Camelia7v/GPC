@@ -120,6 +120,55 @@ void Display()
         DisplayObiect();
         glPopMatrix();
         break;
+    case 'f':
+        // IMAGINEA 2
+        // proiectie 
+        proiectieParalela('f');
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glPushMatrix();
+        //operatii
+        glScalef(-0.095f, -0.095f, -0.095f);
+
+        /*glTranslated(lat / 2.0, lat / 2.0, lat / 2.0);*/
+        glRotatef(45, 0.0f, 0.0f, 1.0f); //rosu
+        glRotatef(-90, 0.0f, 1.0f, 1.0f); //albastruq
+
+        //glRotatef(45, 0.0f, 1.0f, 0.0f); //verde
+        glRotatef(-150, 1.0f, 1.0f, 1.0f); //verde
+        glRotatef(-10, 1.0f, 1.0f, 0.0f);
+        glTranslatef(-lat / 4, -lat / 4, -lat / 4);
+
+        DisplayAxe();
+        DisplayObiect();
+        glPopMatrix();
+        break;
+    case 'g':
+        // IMAGINEA 3
+        // proiectie 
+        proiectieParalela('g');
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glPushMatrix();
+        //operatii
+        glScalef(-0.15f, -0.15f, -0.15f);
+        //glTranslated(lat / 2.0, lat / 2.0, lat / 2.0);
+        glRotatef(-90, 0.0f, 1.0f, 0.0f); //albastru
+        glRotatef(180, 0.0f, 0.0f, 1.0f); //rosu
+        glRotatef(-45, 1.0f, 1.0f, 0.0f); //verde
+        glRotatef(45, 1.0f, 0.0f, 0.0f);
+        glRotatef(15, 1.0f, 1.0f, 0.0f); //rosu
+        glRotatef(-15, 1.0f, 1.0f, 0.0f);
+        glRotatef(-5, 1, 1, 1);
+        glRotatef(-75, 0.0f, 1.0f, 0.0f);
+        //glRotatef(-90, 0.0f, 1.0f, 0.0f);
+
+        DisplayAxe();
+        DisplayObiect();
+        glPopMatrix();
+        break;
     default:
         break;
     }
@@ -184,6 +233,10 @@ void proiectieParalela(unsigned char c) {
     case 'e':
         glOrtho(-1, 6, -1, 6, -1, 20);
         break;
+    case 'f':
+        //glFrustum(-1, 6, -1, 6, -1, 40);
+    case 'g':
+        glFrustum(-10, 10, -10, 10, -20, 20);
     default:
         break;
     }
